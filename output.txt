@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 58
+ETag: "-1761312146"
+Date: Sun, 23 Mar 2014 10:05:20 GMT
+Connection: keep-alive
+
+{
+  "name": "Huang",
+  "job": "no",
+  "room": "co123456"
+}

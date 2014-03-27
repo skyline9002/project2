@@ -1,0 +1,196 @@
+NWEN 304
+
+Lab 1
+
+Student: Hai Huang
+
+StudentID: 300285389
+
+(a) Modify GET /person so it returns the data formatted as a JSON string. 
+
+Test 1: 
+(1) Purpose: Test whether person is already wrapped into object.
+
+(2) curl command: curl -i -o output.txt http://localhost:3000/person
+
+(3)output:
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 65
+ETag: "1347749842"
+Date: Sun, 23 Mar 2014 09:24:25 GMT
+Connection: keep-alive
+
+{
+  "name": "Ian Welch",
+  "job": "Lecturer",
+  "room": "CO337"
+}
+
+(4) evaluation: The person is already wrapped into object, output also is in JSON-format.
+
+Test 2:
+
+(1) Purpose: Test update function of person object
+
+(2) curl command:
+curl -v -H "Accept:application/json" -H "Content-type:application/json" -X POST -d '{"name" : "Hai", "job" : "student", "room": "co88888"}'      http://127.0.0.1:3000/person //update person
+  
+curl -i -o output.txt http://localhost:3000/person  //check output
+
+(3)output:
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 60
+ETag: "-1881571645"
+Date: Sun, 23 Mar 2014 09:38:58 GMT
+Connection: keep-alive
+
+{
+  "name": "Hai",
+  "job": "student",
+  "room": "co88888"
+}
+
+(4) evaluation: person object can update by POST /person, output still is in JSON-format.
+
+
+
+
+Add a method GET /person/room that returns the current room allocation. 
+
+Test 3:
+
+(1) Purpose: Test whether function working.
+
+(2) curl command: curl -i -o output.txt http://localhost:3000/person/room
+
+(3)output:
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 23
+ETag: "985675882"
+Date: Sun, 23 Mar 2014 09:43:36 GMT
+Connection: keep-alive
+
+{
+  "room": "co88888"
+}
+
+evaluation: It already get room attribute and in JSON-format.
+
+Test 4:
+
+(1): Purpose: Test whether update “person” object can update the attributes.
+
+(2) curl command:
+curl -v -H "Accept:application/json" -H "Content-type:application/json" -X POST -d '{"name" : "Huang", "job" : "no", "room": "co9999"}'      http://127.0.0.1:3000/person
+// person object is updated
+
+curl -i -o output.txt http://localhost:3000/person/room // should output co9999
+
+(3)output: 
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 22
+ETag: "276377197"
+Date: Sun, 23 Mar 2014 09:50:06 GMT
+Connection: keep-alive
+
+{
+  "room": "co9999"
+}
+
+(4)evaluation: update “person” object also can update “room” attribute, output in JSON-format.
+
+
+
+
+
+Add a new method POST /person/room that sends a message body containing the JSON formatted string ‘{“room” : “value”}’ where value is the new room assignment. 
+
+Test 5: 
+
+(1) Purpose: Test whether function working.
+
+(2) curl command:
+curl -v -H "Accept:application/json" -H "Content-type:application/json" -X POST -d '{"room": "co123456"}'  http://localhost:3000/person/room
+//only update person.room (co123456)
+
+curl -i -o output.txt http://localhost:3000/person
+curl -i -o output1.txt http://localhost:3000/person/room
+//check person object and person.room respectively and output to two separate files.
+
+(3)
+output.txt:
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 58
+ETag: "-1761312146"
+Date: Sun, 23 Mar 2014 10:05:20 GMT
+Connection: keep-alive
+
+{
+  "name": "Huang",
+  "job": "no",
+  "room": "co123456"
+}
+
+output1.txt:
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 24
+ETag: "1753639024"
+Date: Sun, 23 Mar 2014 10:05:29 GMT
+Connection: keep-alive
+
+{
+  "room": "co123456"
+}
+
+evaluation: satisfy expectation.
+
+
+
+
+Test 6:
+
+(1) Purpose : Test whether function will throw object if request lack of “room” attributes
+
+(2)curl command:
+curl -v -H "Accept:application/json" -H "Content-type:application/json" -X POST -d '{"name": "Mia"}'  http://localhost:3000/person/room
+
+curl -i -o output.txt http://localhost:3000/person/
+//check whether room or name value is changed.
+
+(3)output:
+Error 400: Post syntas incorret(no "room" attribute) // output of first command
+
+// output of second command
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 58
+ETag: "-1761312146"
+Date: Sun, 23 Mar 2014 10:13:08 GMT
+Connection: keep-alive
+
+{
+  "name": "Huang",
+  "job": "no",
+  "room": "co123456"
+}
+
+Evaluation:  If request does not contain “room”, function will throw an error and “name” value also unchanged.
+
+
